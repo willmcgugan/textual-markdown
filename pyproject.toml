@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "textual-markdown"
+version = "0.1.0"
+description = "Markdown viewer widgets for Textual"
+authors = ["Will McGugan <willmcgugan@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "textual_markdown"}]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+textual = {extras = ["dev"], version = "^0.6.0"}
+markdown-it-py = {extras = ["plugins", "linkify"], version = "^2.1.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
