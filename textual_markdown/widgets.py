@@ -8,6 +8,7 @@ from rich.text import Text
 
 from textual.app import ComposeResult
 from textual.containers import Vertical
+from textual.geometry import Offset
 from textual.message import Message
 from textual.reactive import reactive
 from textual.widget import Widget
@@ -24,6 +25,12 @@ class TOCUpdated(Message, bubble=True):
     def __init__(self, toc: TOC, *, sender: Widget) -> None:
         super().__init__(sender=sender)
         self.toc = toc
+
+
+class TOCSelected(Message, bubble=True):
+    def __init__(self, block_id: str, *, sender: Widget) -> None:
+        super().__init__(sender=sender)
+        self.block_id = block_id
 
 
 class Block(Static):
@@ -107,8 +114,18 @@ class H5(Header):
     DEFAULT_CSS = """
     H5 {
         text-style: bold;
-        color: $text-muted;
         color: $text;
+        padding: 1 0;
+    }
+    
+    """
+
+
+class H6(Header):
+    DEFAULT_CSS = """
+    H5 {
+        text-style: bold;
+        color: $text-muted;
         padding: 1 0;
     }
     
@@ -168,21 +185,14 @@ class Fence(Block):
         )
 
 
-HEADINGS = {
-    "h1": H1,
-    "h2": H2,
-    "h3": H3,
-    "h4": H4,
-    "h5": H5,
-}
+HEADINGS = {"h1": H1, "h2": H2, "h3": H3, "h4": H4, "h5": H5, "h6": H6}
 
 
 class MarkdownDocument(Widget):
     DEFAULT_CSS = """
     MarkdownDocument {
         height: auto;
-        margin: 0 4;
-        
+        margin: 0 4;        
     }
     """
 
@@ -245,16 +255,45 @@ class MarkdownDocument(Widget):
 class MarkdownTOC(Widget):
     DEFAULT_CSS = """
     MarkdownTOC {
-        dock: left;
-        width: 40;
-        background: blue;
-    }   
+        width: 32;
+        background: $panel;
+        border-right: wide $background;
+    }
+    MarkdownTOC > Tree {
+        padding: 1;
+        width: 100%;
+    }
     """
 
-    toc: reactive[TOC | None] = reactive(None)
+    toc: reactive[TOC | None] = reactive(None, init=False)
+
+    def compose(self) -> ComposeResult:
+        tree = Tree("TOC")
+        tree.show_root = False
+        tree.show_guides = False
+        tree.guide_depth = 2
+        tree.auto_expand = False
+        yield tree
 
     def watch_toc(self, toc: TOC) -> None:
-        self.log(toc)
+        self.set_toc(toc)
+
+    def set_toc(self, toc: TOC) -> None:
+        tree = self.query_one(Tree)
+        root = tree.root
+        for level, name, block_id in toc:
+            node = root
+            for _ in range(level - 1):
+                if node._children:
+                    node.expand()
+                    node.allow_expand = True
+                    node = node._children[-1]
+                else:
+                    node = node.add(str(level), expand=True)
+            node.add_leaf(name, {"block_id": block_id})
+
+    async def on_tree_node_selected(self, message: Tree.NodeSelected) -> None:
+        await self.emit(TOCSelected(message.node.data["block_id"], sender=self))
 
 
 class MarkdownBrowser(Vertical):
@@ -263,8 +302,12 @@ class MarkdownBrowser(Vertical):
         height: 1fr;
         scrollbar-gutter: stable;
     }
-    MarkdownBrowser > MarkdownTOC {
-        dock: left;
+
+    MarkdownTOC {
+        dock:left;
+    }
+    
+    MarkdownBrowser > MarkdownTOC {        
         display: none;
     }
     
@@ -275,7 +318,8 @@ class MarkdownBrowser(Vertical):
     
     """
 
-    show_toc = reactive(False)
+    show_toc = reactive(True)
+    top_block = reactive("")
 
     @property
     def document(self) -> MarkdownDocument:
@@ -289,5 +333,11 @@ class MarkdownBrowser(Vertical):
         yield MarkdownDocument()
 
     def on_tocupdated(self, message: TOCUpdated) -> None:
-
         self.query_one(MarkdownTOC).toc = message.toc
+        message.stop()
+
+    def on_tocselected(self, message: TOCSelected) -> None:
+        block_selector = f"#{message.block_id}"
+        block = self.query_one(block_selector, Block)
+        self.scroll_to_widget(block, top=True)
+        message.stop()
