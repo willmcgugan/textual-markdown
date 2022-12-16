@@ -1,49 +1,101 @@
-# Rich Markdown Viewer
+# Textual Markdown Browser
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+Just testing various Markdown content.
 
-## Header level 2
+[link](./demo.md)
 
-Here is a code block:
+## Typography
+
+### Emphasis
+
+Lets see if we can add text with *emphasis*. Typically rendered as italics.
+
+> Lets see if we can add text with *emphasis*. Typically rendered as italics. Lets see if we can add text with *emphasis*. Typically rendered as italics.
+> > Lets see if we can add text with *emphasis*. Typically rendered as italics.Lets see if we can add text with *emphasis*. Typically rendered as italics.
+
+### Strong
+
+We can also render **strong** text as bold.
+
+### Strike
+
+We can render ~~strikethrough~~ text.
+
+## Code
+
+Render a code "fence" with syntax highlighting.
 
 ```python
-from __future__ import annotations
+@lru_cache(maxsize=1024)
+def split(self, cut_x: int, cut_y: int) -> tuple[Region, Region, Region, Region]:
+    """Split a region in to 4 from given x and y offsets (cuts).
 
-from typing import Iterable, TypeVar
+    ```
+                cut_x ↓
+            ┌────────┐ ┌───┐
+            │        │ │   │
+            │    0   │ │ 1 │
+            │        │ │   │
+    cut_y → └────────┘ └───┘
+            ┌────────┐ ┌───┐
+            │    2   │ │ 3 │
+            └────────┘ └───┘
+    ```
 
-T = TypeVar("T")
+    Args:
+        cut_x (int): Offset from self.x where the cut should be made. If negative, the cut
+            is taken from the right edge.
+        cut_y (int): Offset from self.y where the cut should be made. If negative, the cut
+            is taken from the lower edge.
 
+    Returns:
+        tuple[Region, Region, Region, Region]: Four new regions which add up to the original (self).
+    """
 
-def loop_first_last(values: Iterable[T]) -> Iterable[tuple[bool, bool, T]]:
-    """Iterate and generate a tuple with a flag for first and last value."""
-    iter_values = iter(values)
-    try:
-        previous_value = next(iter_values)
-    except StopIteration:
-        return
-    first = True
-    for value in iter_values:
-        yield first, False, previous_value
-        first = False
-        previous_value = value
-    yield first, True, previous_value
+    x, y, width, height = self
+    if cut_x < 0:
+        cut_x = width + cut_x
+    if cut_y < 0:
+        cut_y = height + cut_y
+
+    _Region = Region
+    return (
+        _Region(x, y, cut_x, cut_y),
+        _Region(x + cut_x, y, width - cut_x, cut_y),
+        _Region(x, y + cut_y, cut_x, height - cut_y),
+        _Region(x + cut_x, y + cut_y, width - cut_x, height - cut_y),
+    )
 ```
 
-### Header level 3
+## Table
 
-Introducing a block quote:
+Great google moogly, its a GitHub style table in a TUI!
 
-> This is a quote 
->
-> > And a nested quote! ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
-> 
+| Name            | Type   | Default | Description                        |
+| --------------- | ------ | ------- | ---------------------------------- |
+| `show_header`   | `bool` | `True`  | Show the table header              |
+| `fixed_rows`    | `int`  | `0`     | Number of fixed rows               |
+| `fixed_columns` | `int`  | `0`     | Number of fixed columns            |
+| `zebra_stripes` | `bool` | `False` | Display alternating colors on rows |
+| `header_height` | `int`  | `1`     | Height of header row               |
+| `show_cursor`   | `bool` | `True`  | Show a cell cursor                 |
 
-#### Header level 4
 
-blah blah
+## Bullet list
 
-##### Header level 5
+A simple list of items.
 
-## Back to level 2
+- This is a list
+- Another item
+  - Nested
+    - List items may have *formatting*    
+  - Yet another item
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+## Ordered List
+
+Order lists.
+
+1. Hello
+2. World
+   1. asdfsdf
+   2. werwer

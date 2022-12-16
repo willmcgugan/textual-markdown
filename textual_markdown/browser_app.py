@@ -3,30 +3,47 @@ from __future__ import annotations
 from pathlib import Path
 
 from textual.app import App, ComposeResult
+from textual.widget import Widget
 from textual.widgets import Footer
 
 from .widgets import MarkdownBrowser
 
 
 class BrowserApp(App):
-    BINDINGS = [("t", "toggle_toc", "TOC")]
+    BINDINGS = [
+        ("t", "toggle_toc", "TOC"),
+        ("b", "back", "Back"),
+        ("f", "forward", "Forward"),
+    ]
+
+    def __init__(self, path: str) -> None:
+        self.path = path
+        super().__init__()
 
     def compose(self) -> ComposeResult:
         yield Footer()
         yield MarkdownBrowser()
 
+    @property
+    def browser(self) -> MarkdownBrowser:
+        return self.query_one(MarkdownBrowser)
+
     async def on_mount(self) -> None:
-        await self.load("README.md")
-        self.query_one(MarkdownBrowser).focus()
+        self.browser.document.focus()
+        if not await self.browser.go(self.path):
+            self.exit(message=f"Unable to load {self.path!r}")
 
     async def load(self, path: str) -> None:
-        markdown = Path(path).read_text()
-        browser = self.query_one(MarkdownBrowser)
-        await browser.document.update(markdown)
+        await self.browser.go(path)
 
     def action_toggle_toc(self) -> None:
-        browser = self.query_one(MarkdownBrowser)
-        browser.show_toc = not browser.show_toc
+        self.browser.show_toc = not self.browser.show_toc
+
+    async def action_back(self) -> None:
+        await self.browser.back()
+
+    async def action_forward(self) -> None:
+        await self.browser.forward()
 
 
 if __name__ == "__main__":
