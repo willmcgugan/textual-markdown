@@ -232,6 +232,7 @@ class Table(Block):
                 rows[-1].append(block.render())
 
         table = DataTable(zebra_stripes=True)
+        table.can_focus = False
         table.add_columns(*headers)
         table.add_rows([row for row in rows if row])
         yield table
@@ -351,11 +352,12 @@ HEADINGS = {"h1": H1, "h2": H2, "h3": H3, "h4": H4, "h5": H5, "h6": H6}
 NUMERALS = " ⅠⅡⅢⅣⅤⅥ"
 
 
-class MarkdownDocument(Widget, can_focus=True):
+class MarkdownDocument(Widget):
     DEFAULT_CSS = """
     MarkdownDocument {
         height: auto;
-        margin: 0 4 1 4;        
+        margin: 0 4 1 4;
+        layout: vertical;        
     }
     .em {
         text-style: italic;
@@ -496,7 +498,7 @@ class MarkdownDocument(Widget, can_focus=True):
         await self.mount(*output)
 
 
-class MarkdownTOC(Widget):
+class MarkdownTOC(Widget, can_focus_children=True):
     DEFAULT_CSS = """
     MarkdownTOC {
         width: auto;
@@ -541,11 +543,11 @@ class MarkdownTOC(Widget):
         await self.emit(TOCSelected(message.node.data["block_id"], sender=self))
 
 
-class MarkdownBrowser(Vertical, can_focus_children=True):
+class MarkdownBrowser(Vertical, can_focus=True, can_focus_children=True):
     DEFAULT_CSS = """
     MarkdownBrowser {
         height: 1fr;
-        scrollbar-gutter: stable;
+        scrollbar-gutter: stable;        
     }
 
     MarkdownTOC {
@@ -560,6 +562,7 @@ class MarkdownBrowser(Vertical, can_focus_children=True):
         display: block;
     }
     
+
     
     """
 

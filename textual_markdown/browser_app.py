@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from pathlib import Path
+import sys
 
 from textual.app import App, ComposeResult
+from textual.reactive import var
 from textual.widget import Widget
 from textual.widgets import Footer
 
@@ -16,9 +17,7 @@ class BrowserApp(App):
         ("f", "forward", "Forward"),
     ]
 
-    def __init__(self, path: str) -> None:
-        self.path = path
-        super().__init__()
+    path = var("")
 
     def compose(self) -> ComposeResult:
         yield Footer()
@@ -28,8 +27,16 @@ class BrowserApp(App):
     def browser(self) -> MarkdownBrowser:
         return self.query_one(MarkdownBrowser)
 
+    def on_load(self) -> None:
+        try:
+            path = sys.argv[1]
+        except IndexError:
+            self.exit(message="Usage: python -m textual_markdown PATH")
+        else:
+            self.path = path
+
     async def on_mount(self) -> None:
-        self.browser.document.focus()
+        self.browser.focus()
         if not await self.browser.go(self.path):
             self.exit(message=f"Unable to load {self.path!r}")
 
