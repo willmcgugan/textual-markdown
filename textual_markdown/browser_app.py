@@ -52,7 +52,5 @@ class BrowserApp(App):
     async def action_forward(self) -> None:
         await self.browser.forward()
 
-
-if __name__ == "__main__":
-    app = BrowserApp()
-    app.run()
+def run() -> None:
+    BrowserApp().run()
