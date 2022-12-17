@@ -32,7 +32,7 @@ You can install `textual-markdown` from PyPI in the usual way:
 pip install textual-markdown
 ```
 
-Here's how you hopen a Markdown file:
+Here's how you open a Markdown file:
 
 ```
 python -m textual_markdown README.md
