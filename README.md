@@ -17,15 +17,10 @@ https://user-images.githubusercontent.com/554369/208234316-be4e6626-c601-4dca-b8
 
 ## Screenshots
 
-<img width="1186" alt="Screenshot 2022-12-17 at 08 41 58" src="https://user-images.githubusercontent.com/554369/208233944-542b1fec-daaf-4c4b-81d1-2d9eec61e727.png">
-
 ![Screenshot 2022-12-17 at 08 41 58](https://user-images.githubusercontent.com/554369/208233944-542b1fec-daaf-4c4b-81d1-2d9eec61e727.png)
 
-<img width="1186" alt="Screenshot 2022-12-17 at 08 42 33" src="https://user-images.githubusercontent.com/554369/208233987-9667dd87-5ef3-45c3-91fc-166f069e14cb.png">
 
 ![Screenshot 2022-12-17 at 08 42 33](https://user-images.githubusercontent.com/554369/208233987-9667dd87-5ef3-45c3-91fc-166f069e14cb.png)
-
-<img width="1186" alt="Screenshot 2022-12-17 at 08 42 38" src="https://user-images.githubusercontent.com/554369/208233988-f0733761-6794-41f9-893f-f0258b23b988.png">
 
 ![Screenshot 2022-12-17 at 08 42 38](https://user-images.githubusercontent.com/554369/208233988-f0733761-6794-41f9-893f-f0258b23b988.png)
 
