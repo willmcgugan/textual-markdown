@@ -40,7 +40,7 @@ python -m textual_markdown README.md
 
 ## Disclaimer
 
-At time of writing, there is less than a weeks work in this. Which means you may (likely) find bugs.
+At time of writing, there is less than a week's work in this. Which means you may (likely) find bugs.
 
 ## The future
 
