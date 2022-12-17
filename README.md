@@ -1,6 +1,6 @@
 # Textual Markdown Browser
 
-This project is an experiment to see how far I could take the idea of a "Markdown browser" in the terminal, using the [Textual](https://github.com/Textualize/textual) framework.
+This project is an experimental "Markdown browser" for the terminal.
 
 Markdown in the terminal is not unusual. [Rich](https://github.com/Textualize/rich) has a decent Markdown renderer, but its output is essentially static. Textual Markdown creates a more dynamic Markdown document you can interact with: there are working links, code fences with scrollbars, and tables.
 
