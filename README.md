@@ -2,7 +2,7 @@
 
 This project is an experimental "Markdown browser" for the terminal.
 
-Markdown in the terminal is not unusual. [Rich](https://github.com/Textualize/rich) has a decent Markdown renderer, but its output is essentially static. Textual Markdown creates a more dynamic Markdown document you can interact with: there are working links, code fences with scrollbars, and tables.
+Markdown in the terminal is not unusual. [Rich](https://github.com/Textualize/rich) has a decent Markdown renderer, but its output is essentially static. Textual Markdown creates a more dynamic Markdown document you can interact with: there are working [links](./demo.md), code fences with scrollbars, and tables.
 
 Links must be relative and on the filesystem for now. These could be made to load from the network for a more browser like experience. It is also relatively easy to intercept links and handle them programatically. Opening up custom hypertext like applications.
 
