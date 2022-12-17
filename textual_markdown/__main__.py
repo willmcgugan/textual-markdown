@@ -1,9 +1,6 @@
 import sys
 
-from .browser_app import BrowserApp
-
+from .browser_app import run
 
 if __name__ == "__main__":
-
-    app = BrowserApp()
-    app.run()
+    run()
