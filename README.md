@@ -2,9 +2,9 @@
 
 This project is an experiment to see how far I could take the idea of a "Markdown browser" in the terminal, using the [Textual](https://github.com/Textualize/textual) framework.
 
-Markdown in the terminal is not unusual, [Rich](https://github.com/Textualize/rich) has a decent Markdown renderer, but its output is essentially static. Textual Markdown creates a more dynamic Markdown document you can interact with: there are working links, srollablr code fences, and tables.
+Markdown in the terminal is not unusual. [Rich](https://github.com/Textualize/rich) has a decent Markdown renderer, but its output is essentially static. Textual Markdown creates a more dynamic Markdown document you can interact with: there are working links, code fences with scrollbars, and tables.
 
-Links must be relative only and on the filesystem for now. These could be made to load from the network for a more browser like experience. It is also relatively easy to intercept links and handle them programatically. Opening up custom hypertext like applications.
+Links must be relative and on the filesystem for now. These could be made to load from the network for a more browser like experience. It is also relatively easy to intercept links and handle them programatically. Opening up custom hypertext like applications.
 
 And finally, there is a TOC (Table Of Contents) extracted from the Markdown, which can be used to navigate the document.
 
@@ -40,7 +40,7 @@ python -m textual_markdown README.md
 
 ## Disclaimer
 
-At time of writing, there is less than a weeks work in this. Which means you may (likely) find bugs. 
+At time of writing, there is less than a weeks work in this. Which means you may (likely) find bugs.
 
 ## The future
 
