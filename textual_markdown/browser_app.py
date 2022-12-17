@@ -15,6 +15,7 @@ class BrowserApp(App):
         ("t", "toggle_toc", "TOC"),
         ("b", "back", "Back"),
         ("f", "forward", "Forward"),
+        ("r", "reload", "Reload"),
     ]
 
     path = var("")
@@ -51,6 +52,9 @@ class BrowserApp(App):
 
     async def action_forward(self) -> None:
         await self.browser.forward()
+
+    async def action_reload(self) -> None:
+        await self.load(self.path)
 
 
 if __name__ == "__main__":
