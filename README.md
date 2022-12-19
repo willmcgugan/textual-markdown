@@ -28,13 +28,13 @@ https://user-images.githubusercontent.com/554369/208234316-be4e6626-c601-4dca-b8
 
 You can install `textual-markdown` from PyPI in the usual way:
 
-```
+```bash
 pip install textual-markdown
 ```
 
 Here's how you open a Markdown file:
 
-```
+```bash
 python -m textual_markdown README.md
 ```
 
