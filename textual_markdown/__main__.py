@@ -1,6 +1,6 @@
 import sys
 
-from .browser_app import BrowserApp
+from textual_markdown.browser_app import BrowserApp
 
 
 if __name__ == "__main__":

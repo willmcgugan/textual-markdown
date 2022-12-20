@@ -7,7 +7,7 @@ from textual.reactive import var
 from textual.widget import Widget
 from textual.widgets import Footer
 
-from .widgets import MarkdownBrowser
+from textual_markdown.widgets import MarkdownBrowser
 
 
 class BrowserApp(App):

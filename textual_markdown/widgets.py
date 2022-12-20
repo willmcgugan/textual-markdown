@@ -376,7 +376,7 @@ class MarkdownDocument(Widget):
 
     async def load(self, path: Path) -> bool:
         try:
-            markdown = path.read_text()
+            markdown = path.read_text(encoding="utf-8")
         except Exception:
             return False
         await self.query("Block").remove()
