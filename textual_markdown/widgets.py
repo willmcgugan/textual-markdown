@@ -374,13 +374,16 @@ class MarkdownDocument(Widget):
     """
     COMPONENT_CLASSES = {"em", "strong", "s", "code_inline"}
 
+    async def read(self, markdown: str) -> None:
+        await self.query("Block").remove()
+        await self.update(markdown)
+
     async def load(self, path: Path) -> bool:
         try:
             markdown = path.read_text()
         except Exception:
             return False
-        await self.query("Block").remove()
-        await self.update(markdown)
+        await self.read(markdown)
         return True
 
     async def update(self, markdown: str) -> None:
@@ -574,6 +577,9 @@ class MarkdownBrowser(Vertical, can_focus=True, can_focus_children=True):
     @property
     def document(self) -> MarkdownDocument:
         return self.query_one(MarkdownDocument)
+
+    async def read(self, markdown: str) -> None:
+        await self.document.read(markdown)
 
     async def go(self, location: str) -> bool:
         return await self.document.load(self.navigator.go(location))
