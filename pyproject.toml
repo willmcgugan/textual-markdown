@@ -9,7 +9,7 @@ packages = [{include = "textual_markdown"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-textual = {extras = ["dev"], version = "^0.7.0"}
+textual = {extras = ["dev"], version = "^0.10.1"}
 markdown-it-py = {extras = ["plugins", "linkify"], version = "^2.1.0"}
 
 

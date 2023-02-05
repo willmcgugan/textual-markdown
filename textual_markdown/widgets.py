@@ -376,7 +376,7 @@ class MarkdownDocument(Widget):
 
     async def load(self, path: Path) -> bool:
         try:
-            markdown = path.read_text()
+            markdown = path.read_text(encoding="utf-8")
         except Exception:
             return False
         await self.query("Block").remove()
@@ -536,11 +536,13 @@ class MarkdownTOC(Widget, can_focus_children=True):
                     node.expand()
                     node.allow_expand = True
                 else:
-                    node = node.add(NUMERALS(level), expand=True)
+                    node = node.add(NUMERALS[level], expand=True)
             node.add_leaf(f"[dim]{NUMERALS[level]}[/] {name}", {"block_id": block_id})
 
     async def on_tree_node_selected(self, message: Tree.NodeSelected) -> None:
-        await self.emit(TOCSelected(message.node.data["block_id"], sender=self))
+        node_data = message.node.data
+        if node_data is not None:
+            await self.emit(TOCSelected(node_data["block_id"], sender=self))
 
 
 class MarkdownBrowser(Vertical, can_focus=True, can_focus_children=True):

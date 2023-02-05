@@ -6,9 +6,7 @@ This page contains a lot of Markdown code we will use to test the MD browser.
 
 Headers levels 1 through 6 are supported.
 
-### This is H3
-
-Header level 3 content. Still fairly important, but we don't want it to be too distracting.
+.
 
 #### This is H4
 
