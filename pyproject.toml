@@ -16,3 +16,6 @@ markdown-it-py = {extras = ["plugins", "linkify"], version = "^2.1.0"}
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+mdex = "textual_markdown.browser_app:run"
