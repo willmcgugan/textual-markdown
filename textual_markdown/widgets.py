@@ -324,7 +324,6 @@ class ListItem(Block):
         super().__init__()
 
     def compose(self) -> ComposeResult:
-
         bullet = Bullet()
         bullet.symbol = self.bullet
         yield bullet
