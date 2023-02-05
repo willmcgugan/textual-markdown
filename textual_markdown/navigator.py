@@ -15,7 +15,7 @@ class Navigator:
         """The current location.
 
         Returns:
-            Path: A path for the current document.
+            A path for the current document.
         """
         if not self.stack:
             return Path(".")
@@ -25,7 +25,7 @@ class Navigator:
         """Go to a new document.
 
         Args:
-            path (str): Path to new document.
+            path: Path to new document.
 
         Returns:
             Path: New location.
@@ -41,7 +41,7 @@ class Navigator:
         """Go back in the stack.
 
         Returns:
-            bool: True if the location changed, otherwise False.
+            True if the location changed, otherwise False.
         """
         if self.index:
             self.index -= 1
@@ -52,7 +52,7 @@ class Navigator:
         """Go forward in the stack.
 
         Returns:
-            bool: True if the location changed, otherwise False.
+            True if the location changed, otherwise False.
         """
         if self.index < len(self.stack) - 1:
             self.index += 1
