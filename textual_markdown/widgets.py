@@ -3,19 +3,16 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Iterable, TypeAlias
 
+from markdown_it import MarkdownIt
 from rich.style import Style
 from rich.syntax import Syntax
 from rich.text import Text
-
 from textual.app import ComposeResult
 from textual.containers import Vertical
 from textual.message import Message
 from textual.reactive import reactive, var
 from textual.widget import Widget
-from textual.widgets import Static, Tree
-from textual.widgets import DataTable
-
-from markdown_it import MarkdownIt
+from textual.widgets import DataTable, Static, Tree
 
 from .navigator import Navigator
 
