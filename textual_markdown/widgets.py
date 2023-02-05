@@ -22,25 +22,9 @@ from .navigator import Navigator
 TOC: TypeAlias = "list[tuple[int, str, str]]"
 
 
-class TOCUpdated(Message, bubble=True):
-    def __init__(self, toc: TOC, *, sender: Widget) -> None:
-        super().__init__(sender=sender)
-        self.toc = toc
-
-
-class TOCSelected(Message, bubble=True):
-    def __init__(self, block_id: str, *, sender: Widget) -> None:
-        super().__init__(sender=sender)
-        self.block_id = block_id
-
-
-class LinkClicked(Message, bubble=True):
-    def __init__(self, href: str, *, sender: Widget) -> None:
-        super().__init__(sender=sender)
-        self.href = href
-
-
 class Block(Static):
+    """The base class for a Markdown Element."""
+
     DEFAULT_CSS = """
     Block {
         height: auto;       
@@ -59,10 +43,12 @@ class Block(Static):
         self.update(text)
 
     async def action_link(self, href: str) -> None:
-        await self.emit(LinkClicked(href, sender=self))
+        await self.emit(MarkdownDocument.LinkClicked(href, sender=self))
 
 
 class Header(Block):
+    """Base class for a Markdown header."""
+
     DEFAULT_CSS = """
     Header {
         color: $text;
@@ -71,6 +57,8 @@ class Header(Block):
 
 
 class H1(Header):
+    """An H1 Markdown header."""
+
     DEFAULT_CSS = """
     
     H1 {
@@ -87,6 +75,8 @@ class H1(Header):
 
 
 class H2(Header):
+    """An H2 Markdown header."""
+
     DEFAULT_CSS = """
     
     H2 {
@@ -103,6 +93,7 @@ class H2(Header):
 
 
 class H3(Header):
+    """An H3 Markdown header."""
 
     DEFAULT_CSS = """
     H3 {
@@ -116,6 +107,8 @@ class H3(Header):
 
 
 class H4(Header):
+    """An H4 Markdown header."""
+
     DEFAULT_CSS = """
     H4 {
         text-style: underline;
@@ -126,6 +119,8 @@ class H4(Header):
 
 
 class H5(Header):
+    """An H5 Markdown header."""
+
     DEFAULT_CSS = """
     H5 {
         text-style: bold;
@@ -137,6 +132,8 @@ class H5(Header):
 
 
 class H6(Header):
+    """An H6 Markdown header."""
+
     DEFAULT_CSS = """
     H6 {
         text-style: bold;
@@ -148,6 +145,8 @@ class H6(Header):
 
 
 class Paragraph(Block):
+    """A paragraph Markdown block."""
+
     DEFAULT_CSS = """
     MarkdownDocument > Paragraph {
          margin: 0 0 1 0;
@@ -156,6 +155,8 @@ class Paragraph(Block):
 
 
 class BlockQuote(Block):
+    """A block quote Markdown block."""
+
     DEFAULT_CSS = """
     BlockQuote { 
         background: $boost;
@@ -172,6 +173,8 @@ class BlockQuote(Block):
 
 
 class BulletList(Block):
+    """A Bullet list Markdown block."""
+
     DEFAULT_CSS = """
     
     BulletList {
@@ -188,6 +191,8 @@ class BulletList(Block):
 
 
 class OrderedList(Block):
+    """An ordered list Markdown block."""
+
     DEFAULT_CSS = """
     
     OrderedList {
@@ -204,6 +209,8 @@ class OrderedList(Block):
 
 
 class Table(Block):
+    """A Table markdown Block."""
+
     DEFAULT_CSS = """
     Table {
         margin: 1 0;
@@ -240,36 +247,48 @@ class Table(Block):
 
 
 class TBody(Block):
+    """A table body Markdown block."""
+
     DEFAULT_CSS = """
     
     """
 
 
 class THead(Block):
+    """A table head Markdown block."""
+
     DEFAULT_CSS = """
     
     """
 
 
 class TR(Block):
+    """A table row Markdown block."""
+
     DEFAULT_CSS = """
     
     """
 
 
 class TH(Block):
+    """A table header Markdown block."""
+
     DEFAULT_CSS = """
     
     """
 
 
 class TD(Block):
+    """A table data Markdown block."""
+
     DEFAULT_CSS = """
     
     """
 
 
 class Bullet(Widget):
+    """A bullet widget."""
+
     DEFAULT_CSS = """
     Bullet {
         width: auto;
@@ -283,6 +302,8 @@ class Bullet(Widget):
 
 
 class ListItem(Block):
+    """A list item Markdown block."""
+
     DEFAULT_CSS = """
     
     ListItem {
@@ -313,6 +334,8 @@ class ListItem(Block):
 
 
 class Fence(Block):
+    """A fence Markdown block."""
+
     DEFAULT_CSS = """
     Fence {
         margin: 1 0;
@@ -374,7 +397,36 @@ class MarkdownDocument(Widget):
     """
     COMPONENT_CLASSES = {"em", "strong", "s", "code_inline"}
 
+    class TOCUpdated(Message, bubble=True):
+        """The table of contents was updated."""
+
+        def __init__(self, toc: TOC, *, sender: Widget) -> None:
+            super().__init__(sender=sender)
+            self.toc = toc
+
+    class TOCSelected(Message, bubble=True):
+        """An item in the TOC was selected."""
+
+        def __init__(self, block_id: str, *, sender: Widget) -> None:
+            super().__init__(sender=sender)
+            self.block_id = block_id
+
+    class LinkClicked(Message, bubble=True):
+        """A link in the document was clicked."""
+
+        def __init__(self, href: str, *, sender: Widget) -> None:
+            super().__init__(sender=sender)
+            self.href = href
+
     async def load(self, path: Path) -> bool:
+        """Load a new Markdown document.
+
+        Args:
+            path: Path to the document.
+
+        Returns:
+            True on success, or False if the document could not be read.
+        """
         try:
             markdown = path.read_text(encoding="utf-8")
         except Exception:
@@ -384,6 +436,11 @@ class MarkdownDocument(Widget):
         return True
 
     async def update(self, markdown: str) -> None:
+        """Update the document with new Markdown.
+
+        Args:
+            markdown: A string containing Markdown.
+        """
         output: list[Block] = []
         stack: list[Block] = []
         parser = MarkdownIt("gfm-like")
@@ -494,7 +551,7 @@ class MarkdownDocument(Widget):
                     )
                 )
 
-        await self.emit(TOCUpdated(toc, sender=self))
+        await self.emit(MarkdownDocument.TOCUpdated(toc, sender=self))
         await self.mount(*output)
 
 
@@ -522,9 +579,15 @@ class MarkdownTOC(Widget, can_focus_children=True):
         yield tree
 
     def watch_toc(self, toc: TOC) -> None:
+        """Triggered when the TOC changes."""
         self.set_toc(toc)
 
     def set_toc(self, toc: TOC) -> None:
+        """Set the Table of Contents.
+
+        Args:
+            toc: Table of contents.
+        """
         tree = self.query_one(Tree)
         tree.clear()
         root = tree.root
@@ -542,7 +605,9 @@ class MarkdownTOC(Widget, can_focus_children=True):
     async def on_tree_node_selected(self, message: Tree.NodeSelected) -> None:
         node_data = message.node.data
         if node_data is not None:
-            await self.emit(TOCSelected(node_data["block_id"], sender=self))
+            await self.emit(
+                MarkdownDocument.TOCSelected(node_data["block_id"], sender=self)
+            )
 
 
 class MarkdownBrowser(Vertical, can_focus=True, can_focus_children=True):
@@ -564,8 +629,6 @@ class MarkdownBrowser(Vertical, can_focus=True, can_focus_children=True):
         display: block;
     }
     
-
-    
     """
 
     show_toc = reactive(True)
@@ -575,20 +638,26 @@ class MarkdownBrowser(Vertical, can_focus=True, can_focus_children=True):
 
     @property
     def document(self) -> MarkdownDocument:
+        """The Markdown document object."""
         return self.query_one(MarkdownDocument)
 
     async def go(self, location: str) -> bool:
+        """Navigate to a new document path."""
         return await self.document.load(self.navigator.go(location))
 
     async def back(self) -> None:
+        """Go back one level in the history."""
         if self.navigator.back():
             await self.document.load(self.navigator.location)
 
     async def forward(self) -> None:
+        """Go forward one level in the history."""
         if self.navigator.forward():
             await self.document.load(self.navigator.location)
 
-    async def on_link_clicked(self, message: LinkClicked) -> None:
+    async def on_markdown_document_link_clicked(
+        self, message: MarkdownDocument.LinkClicked
+    ) -> None:
         message.stop()
         await self.go(message.href)
 
@@ -599,11 +668,15 @@ class MarkdownBrowser(Vertical, can_focus=True, can_focus_children=True):
         yield MarkdownTOC()
         yield MarkdownDocument()
 
-    def on_tocupdated(self, message: TOCUpdated) -> None:
+    def on_markdown_document_tocupdated(
+        self, message: MarkdownDocument.TOCUpdated
+    ) -> None:
         self.query_one(MarkdownTOC).toc = message.toc
         message.stop()
 
-    def on_tocselected(self, message: TOCSelected) -> None:
+    def on_markdown_document_tocselected(
+        self, message: MarkdownDocument.TOCSelected
+    ) -> None:
         block_selector = f"#{message.block_id}"
         block = self.query_one(block_selector, Block)
         self.scroll_to_widget(block, top=True)
