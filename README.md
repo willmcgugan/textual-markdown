@@ -1,5 +1,6 @@
-> **Note*
-> This project has been archived, and is now an official part of Textual. See https://textual.textualize.io/widgets/markdown_viewer/ and https://textual.textualize.io/widgets/markdown/
+> **Note**
+> 
+> This project has been archived, and is now an official part of Textual. See [MarkdownViwer](https://textual.textualize.io/widgets/markdown_viewer/) and [Markdown](https://textual.textualize.io/widgets/markdown/)
 
 # Textual Markdown Browser
 
