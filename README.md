@@ -1,3 +1,6 @@
+> **Note*
+> This project has been archived, and is now an official part of Textual. See https://textual.textualize.io/widgets/markdown_viewer/ and https://textual.textualize.io/widgets/markdown/
+
 # Textual Markdown Browser
 
 This project is an experimental "Markdown browser" for the terminal, built with [Textual](https://github.com/Textualize/textual).
